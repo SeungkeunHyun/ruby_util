@@ -22,8 +22,12 @@ end
 
 def setloglevel(lvl)
 	prevlevel = $logger.level
-	$logger.level = $loglevels.index(lvl)
-	info("Log level changed from #{$loglevels[prevlevel].upcase} to #{lvl.upcase}")
+	if prevlevel == $loglevels.index(lvl)
+		info("Log level kept as #{$loglevels[prevlevel].upcase}")
+	else
+		$logger.level = $loglevels.index(lvl)
+		info("Log level changed from #{$loglevels[prevlevel].upcase} to #{lvl.upcase}")
+	end
 end
 
 def debug(*args)
