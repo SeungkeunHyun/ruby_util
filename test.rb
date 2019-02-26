@@ -32,7 +32,25 @@ def test_files()
 	fage = fileage(fpath)
 	debug('file modified day(s) before', timeasday(fage))
 end
+
+def test_addtonil()
+	puts nil + 3
+end
+
+def dividebyzero()
+	30 / 0
+end
+
+def raise_error()
+	begin
+		test_addtonil()
+	rescue => exception
+		error_handler(exception)
+	end
+	dividebyzero
+end
 #puts(JSON.pretty_generate(dic))
 test_parsedate
 test_loadjson
 test_files
+raise_error

@@ -1,12 +1,14 @@
 require 'logger'
 
 $logger = nil
+$loglevels = ['debug', 'info', 'warn', 'error', 'fatal']
 if defined?(logging)
 	$logger = logging
 else
 	$logger = Logger.new(STDOUT)
-	level = Logger::DEBUG
+	$logger.level = Logger::DEBUG
 end
+
 $logger.formatter = proc do |severity, datetime, progname, msg|
     date_format = datetime.strftime("%Y-%m-%d %H:%M:%S")
     if severity == "INFO" or severity == "WARN"
@@ -16,14 +18,15 @@ $logger.formatter = proc do |severity, datetime, progname, msg|
     end
 end
 
+def setloglevel(lvl)
+	prevlevel = $logger.level
+	$logger.level = $loglevels.index(lvl)
+	info("Log level changed from #{$loglevels[prevlevel].upcase} to #{lvl.upcase}")
+end
+
 def debug(*args)
 	ref = caller_locations(1,1)[0].label
 	log(ref, Logger::DEBUG, args)
-end
-
-def info(*args)
-	ref = caller_locations(1,1)[0].label
-	log(ref, Logger::INFO, args)
 end
 
 def info(*args)
@@ -37,7 +40,8 @@ def warn(*args)
 end
 
 def error(*args)
-	ref = caller_locations(1,1)[0].label
+	depth = caller_locations.length
+	ref = caller_locations(depth-1,1)[0].label
 	log(ref, Logger::ERROR, args)
 end
 
@@ -83,5 +87,11 @@ end
 
 def error_handler(err)
 	(Thread.current[:errors] ||= []) << err
-	error("#{err.class}: #{err.message}\n" + err.backtrace.join("\n"))
+	error("#{err.class}: #{err.message} " + err.backtrace.join(","))
+end
+
+at_exit do
+	if $!
+		fatal("#{$!} at #{$@}")
+	end
 end
