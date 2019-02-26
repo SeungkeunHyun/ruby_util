@@ -18,3 +18,4 @@ if config.key?('log.path')
 	end
 end
 setloglevel(config['log.level'])
+setformatter

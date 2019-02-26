@@ -9,13 +9,15 @@ else
 	$logger.level = Logger::DEBUG
 end
 
-$logger.formatter = proc do |severity, datetime, progname, msg|
-    date_format = datetime.strftime("%Y-%m-%d %H:%M:%S")
-    if severity == "INFO" or severity == "WARN"
-        "[#{date_format}] #{severity}  (#{progname}): #{msg}\n"
-    else
-        "[#{date_format}] #{severity} (#{progname}): #{msg}\n"
-    end
+def setformatter()
+	$logger.formatter = proc do |severity, datetime, progname, msg|
+		date_format = datetime.strftime("%Y-%m-%d %H:%M:%S")
+		if severity == "INFO" or severity == "WARN"
+			"[#{date_format}] #{severity}  (#{progname}): #{msg}\n"
+		else
+			"[#{date_format}] #{severity} (#{progname}): #{msg}\n"
+		end
+	end
 end
 
 def setloglevel(lvl)
