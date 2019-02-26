@@ -29,7 +29,8 @@ end
 
 def test_files()
 	fpath = 'E:\myCoding\python\projects\utils\python_labs\env\Lib\site-packages\pycodestyle-2.5.0.dist-info\metadata.json'
-	debug(fileage(fpath))
+	fage = fileage(fpath)
+	debug('file modified day(s) before', timeasday(fage))
 end
 #puts(JSON.pretty_generate(dic))
 test_parsedate

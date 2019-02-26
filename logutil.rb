@@ -80,3 +80,8 @@ def log(*args)
 			$logger.fatal(args)
 	end
 end
+
+def error_handler(err)
+	(Thread.current[:errors] ||= []) << err
+	error("#{err.class}: #{err.message}\n" + err.backtrace.join("\n"))
+end

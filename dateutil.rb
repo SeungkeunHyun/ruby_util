@@ -79,3 +79,11 @@ end
 def daysaway(odate)
 	return diffdate(Date.today, odate)
 end
+
+def timeashour(tm)
+	return tm.to_i / 3600
+end
+
+def timeasday(tm)
+	return timeashour(tm) / 24
+end
