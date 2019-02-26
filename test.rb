@@ -17,12 +17,21 @@ def test_parsedate()
 	debug(dt)
 
 	debug(getage('1973-12-19'))
+
+	debug(diffdate(dt, '2019-2-1'))
+	debug(daysaway('Oct 19, 2019'))
 end
 
 def test_loadjson() 
 	dic = loadjson('E:\myCoding\python\projects\utils\python_labs\env\Lib\site-packages\pycodestyle-2.5.0.dist-info\metadata.json')
-	debug('test', 'debug', dic)	
+	#debug('test', 'debug', dic)	
+end
+
+def test_files()
+	fpath = 'E:\myCoding\python\projects\utils\python_labs\env\Lib\site-packages\pycodestyle-2.5.0.dist-info\metadata.json'
+	debug(fileage(fpath))
 end
 #puts(JSON.pretty_generate(dic))
 test_parsedate
 test_loadjson
+test_files
