@@ -47,10 +47,26 @@ def raise_error()
 	rescue => exception
 		error_handler(exception)
 	end
-	dividebyzero
+end
+
+def test_cast()
+	debug('is integer? ', is_integer?(3))
+	debug('is integer? ', is_integer?('3'))
+	debug('is integer? ', is_integer?('3.4'))
+	debug('is float? ', is_float?(3.4))
+	debug('is float? ', is_float?('3'))
+	debug('is floate? ', is_float?('3.4'))
+	debug('try cast', trycast('3.5'))
+	debug('try cast', trycast('3'))
+	debug('try cast', trycast('A3'))
+	debug('to be int', tobeint('345.4km'))
+	debug('to be amount', tobeamount('1118.543'))
+	debug('to be alphanum', tobealphanum('abc - 123,596#$%^^'))
+	debug('to be nonspace', tobenonspace('1 2 3 a b c !@#$ $^&&*'))
 end
 #puts(JSON.pretty_generate(dic))
 test_parsedate
 test_loadjson
 test_files
 raise_error
+test_cast

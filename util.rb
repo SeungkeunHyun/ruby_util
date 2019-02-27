@@ -3,6 +3,7 @@ require 'json'
 require './logutil.rb'
 require './dateutil.rb'
 require './fileutil.rb'
+require './regxutil.rb'
 
 def initLogger()
 	config = loadjson('./utilcfg.json')
