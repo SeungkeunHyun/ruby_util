@@ -12,6 +12,15 @@ def is_float?(obj)
 	return false
 end
 
+def is_email?(obj)
+	if obj
+		if obj =~ URI::MailTo::EMAIL_REGEXP
+			return true
+		end
+	end 
+	return false
+end
+
 def trycast(obj)
 	if obj
 		return is_integer?(obj) ? obj.to_i : is_float?(obj) ? obj.to_f : obj
