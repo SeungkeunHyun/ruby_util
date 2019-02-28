@@ -23,12 +23,12 @@ def test_parsedate()
 end
 
 def test_loadjson() 
-	dic = loadjson('E:\myCoding\python\projects\utils\python_labs\env\Lib\site-packages\pycodestyle-2.5.0.dist-info\metadata.json')
+	dic = loadjson('E:/myCoding/python/projects/utils/python_labs/env/Lib/site-packages/pycodestyle-2.5.0.dist-info/metadata.json')
 	#debug('test', 'debug', dic)	
 end
 
 def test_files()
-	fpath = 'E:\myCoding\python\projects\utils\python_labs\env\Lib\site-packages\pycodestyle-2.5.0.dist-info\metadata.json'
+	fpath = 'E:/myCoding/python/projects/utils/python_labs/env/Lib/site-packages/pycodestyle-2.5.0.dist-info/metadata.json'
 	fage = fileage(fpath)
 	debug('file modified day(s) before', timeasday(fage))
 end
@@ -66,9 +66,19 @@ def test_cast()
 	debug('to be alphanum', tobealphanum('abc - 123,596#$%^^'))
 	debug('to be nonspace', tobenonspace('1 2 3 a b c !@#$ $^&&*'))
 end
+
+def test_file()
+	fpath = 'E:/work/Ingenuous/OneDrive - ingenuous.com.au/Projects/EWB/Documents from EWB/INSTINCT_FLAT_FILES_FROM_CAS_ASCCEND/AUTO_LOAN_FILE/ADDRESS_12202018.txt'
+	files = Dir[File.dirname(fpath) + '/*.txt']
+	debug('files of the folder: (%d)' % files.length,  files)
+	debug('get key records of a file', getlinesofkey(fpath, '^2164003'))
+	debug('get jsons of a file', getrecordsofkey(fpath, '^2164003'))
+	debug('get file in the folder with pattern', getfileoffolder(File.dirname(fpath), '/CAS_APPLICATIONS*.txt'))
+end
 #puts(JSON.pretty_generate(dic))
 test_parsedate
 test_loadjson
 test_files
 raise_error
 test_cast
+test_file

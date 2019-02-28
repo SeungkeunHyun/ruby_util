@@ -65,13 +65,14 @@ def log(*args)
 		case arg
 			when Array
 				if arg[0].class == Hash
-					JSON.pretty_generate(arg)
+					puts(JSON.pretty_generate(arg))
+					arg = arg
 				else
-					arg
+					arg = arg
 				end
 			when Hash
 				puts(JSON.pretty_generate(arg))
-				nil
+				arg = arg
 			else
 				arg = arg
 		end
