@@ -57,3 +57,7 @@ def getfileoffolder(path, filepat)
 	end
 	return nil
 end
+
+def writejson(hashdat, path)
+	File.write(path, JSON.pretty_generate(hashdat))
+end

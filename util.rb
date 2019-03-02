@@ -1,12 +1,13 @@
 require 'date'
 require 'json'
-require './logutil.rb'
-require './dateutil.rb'
-require './fileutil.rb'
-require './regxutil.rb'
+require_relative './logutil.rb'
+require_relative './dateutil.rb'
+require_relative './fileutil.rb'
+require_relative './regxutil.rb'
+require_relative './parse_batch.rb'
 
 def initLogger()
-	config = loadjson('./utilcfg.json')
+	config = loadjson(File.dirname(__FILE__) + '/utilcfg.json')
 	if config.key?('log.path')
 		lpath = config['log.path']
 		unless File.file?(lpath)

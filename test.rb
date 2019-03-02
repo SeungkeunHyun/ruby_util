@@ -75,10 +75,20 @@ def test_file()
 	debug('get jsons of a file', getrecordsofkey(fpath, '^2164003'))
 	debug('get file in the folder with pattern', getfileoffolder(File.dirname(fpath), '/CAS_APPLICATIONS*.txt'))
 end
+
+def test_parsebatch()
+	ib = InstinctBatch.new(jsonpath: "E:/work/Ingenuous/OneDrive - ingenuous.com.au/poc/TH-Summit/prep/logstash/subwork/mapInstinct.json")
+	bline = ib.generatesample()
+	parsedrec = ib.parserecord(batchline: bline)
+	writejson(parsedrec, './sampleparsed.json')
+end
+
+test_parsebatch()
+
 #puts(JSON.pretty_generate(dic))
-test_parsedate
-test_loadjson
-test_files
-raise_error
-test_cast
-test_file
+#test_parsedate
+#test_loadjson
+#test_files
+#raise_error
+#test_cast
+#test_file 

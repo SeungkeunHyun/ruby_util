@@ -54,3 +54,17 @@ end
 def tobenonspace(obj)
 	obj.to_s.gsub(/\s/,'')
 end
+
+def getfields(obj, delim)
+	obj.to_s.strip.gsub(/[#{delim}]+$/, '').split(delim)
+end
+
+def makehash(obj, delim, fields)
+	debug(obj, delim, fields)
+	fds = obj.to_s.strip.split(delim)
+	hashrec = {}
+	fields.each do |field|
+		hashrec[field] = fds.shift()
+	end
+	return hashrec
+end

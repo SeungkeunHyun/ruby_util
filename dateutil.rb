@@ -50,6 +50,10 @@ def parsedate(strdt)
 	return nil
 end
 
+def generaterandomdob()
+ 	return rand(Date.civil(1960, 1, 1)..Date.civil(2000, 12, 31))
+end
+
 def getage(dob)
 	dtbirth = parsedate(dob)
 	age = Date.today.year - dtbirth.year
