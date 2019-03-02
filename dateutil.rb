@@ -54,6 +54,14 @@ def generaterandomdob()
  	return rand(Date.civil(1960, 1, 1)..Date.civil(2000, 12, 31))
 end
 
+def generatetimeinms()
+	return DateTime.now.strftime('%Q')
+end
+
+def generatedatelately()
+	return rand((DateTime.now - 100)..DateTime.now)
+end
+
 def getage(dob)
 	dtbirth = parsedate(dob)
 	age = Date.today.year - dtbirth.year

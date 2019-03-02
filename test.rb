@@ -77,7 +77,7 @@ def test_file()
 end
 
 def test_parsebatch()
-	ib = InstinctBatch.new(jsonpath: "E:/work/Ingenuous/OneDrive - ingenuous.com.au/poc/TH-Summit/prep/logstash/subwork/mapInstinct.json")
+	ib = InstinctBatch.new(jsonpath: "E:/work/Ingenuous/OneDrive - ingenuous.com.au/poc/TH-Summit/prep/logstash/subwork/mapInstinct.json",countrycode: 'TH', org:'SUT')
 	bline = ib.generatesample()
 	parsedrec = ib.parserecord(batchline: bline)
 	writejson(parsedrec, './sampleparsed.json')

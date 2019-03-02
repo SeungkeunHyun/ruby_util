@@ -1,6 +1,8 @@
 class InstinctBatch
-	def initialize(jsonpath:)
+	def initialize(jsonpath:, countrycode:, org:)
 		@jsondic = loadjson(jsonpath)
+		@countrycode = countrycode
+		@org = org
 		generatemerges()
 		#debug(@jsondic)
 	end
@@ -34,7 +36,20 @@ class InstinctBatch
 		@jsondic.each do |c, fields|
 			debug('category: ', c)
 			unless fields[0].key?('category_identifier')
-				rec += fields.map { |fld| fld['Field'] }
+				rec += fields.map { |fld| 
+					case fld['Field']
+					when /Organisation/i
+						@org
+					when /Application number/i
+						generatetimeinms()
+					when /Application Type/i
+						['AUTO', 'LOAN', 'CARD'].sample
+					when /Country Code/i
+						@countrycode
+					else
+						fld['Field'] 
+					end
+				}
 				next
 			end
 			subcat = fields.map { |fld| 
@@ -43,6 +58,12 @@ class InstinctBatch
 				else
 					if fld['Field'] =~ /Date of Birth/i
 						generaterandomdob().strftime('%d/%m/%Y')
+					elsif fld['Field'] =~ /Sex/i
+						['M', 'F'].sample
+					elsif fld['Type'] =~ /datetime/i
+						generatedatelately().strftime('%d/%m/%Y')
+					elsif fld['Type'] =~ /int/i
+						generatetimeinms()
 					else
 						fld['Field'] 
 					end
@@ -65,6 +86,7 @@ class InstinctBatch
 		cid = fields.shift()
 		catdef = nil
 		subdic = {}
+		cat = nil
 		@jsondic.each do |cat, f|
 			if cat == 'Application'
 				next
@@ -84,7 +106,20 @@ class InstinctBatch
 		end
 		catdef.each do |fdef|
 			fname = fdef['Field']
-			subdic[fname] = fields.shift()
+			val = fields.shift()
+			case fdef['Type']
+			when /datetime/i
+				unless parsedate(val)
+					warn("#{cat}.#{fname} is invalid datetime", val)
+					subdic[fname] = nil
+					continue
+				end
+				subdic[fname] = val
+			when /int/i
+				subdic[fname] = trycast(val)
+			else
+				subdic[fname] = val
+			end
 		end
 		if fields.length > 1
 			mapsubcategory(fields, dic)
