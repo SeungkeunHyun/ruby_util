@@ -1,6 +1,6 @@
 class InstinctBatch
 	def initialize(jsonpath:, countrycode:, org:)
-		@jsondic = loadjson(jsonpath)
+		@jsondic = FileUtil.loadjson(jsonpath)
 		@countrycode = countrycode
 		@org = org
 		generatemerges()
@@ -22,8 +22,8 @@ class InstinctBatch
 				ageofapp = nil
 				frec.each do |fn, fv|
 					if fn =~ /Date of Birth/i
-						debug('Date of birth', k, fn, fv)										
-						ageofapp = getage(fv)
+						LogUtil.debug('Date of birth', k, fn, fv)										
+						ageofapp = DateUtil.getage(fv)
 					end
 				end
 				frec['Age_of_Applicant'] = ageofapp
@@ -34,14 +34,14 @@ class InstinctBatch
 	def generatesample(delimiter: '|')
 		rec = []
 		@jsondic.each do |c, fields|
-			debug('category: ', c)
+			LogUtil.debug('category: ', c)
 			unless fields[0].key?('category_identifier')
 				rec += fields.map { |fld| 
 					case fld['Field']
 					when /Organisation/i
 						@org
 					when /Application number/i
-						generatetimeinms()
+						DateUtil.generatetimeinms()
 					when /Application Type/i
 						['AUTO', 'LOAN', 'CARD'].sample
 					when /Country Code/i
@@ -57,13 +57,13 @@ class InstinctBatch
 					fld['category_identifier']
 				else
 					if fld['Field'] =~ /Date of Birth/i
-						generaterandomdob().strftime('%d/%m/%Y')
+						DateUtil.generaterandomdob().strftime('%d/%m/%Y')
 					elsif fld['Field'] =~ /Sex/i
 						['M', 'F'].sample
 					elsif fld['Type'] =~ /datetime/i
-						generatedatelately().strftime('%d/%m/%Y')
+						DateUtil.generatedatelately().strftime('%d/%m/%Y')
 					elsif fld['Type'] =~ /int/i
-						generatetimeinms()
+						DateUtil.generatetimeinms()
 					else
 						fld['Field'] 
 					end
@@ -96,7 +96,7 @@ class InstinctBatch
 			if cid == fidx['category_identifier']
 				catdef = fdic
 				(dic[cat] ||= []) << subdic
-				debug('found category ', cat)
+				LogUtil.debug('found category ', cat)
 				break
 			end
 		end
@@ -109,14 +109,14 @@ class InstinctBatch
 			val = fields.shift()
 			case fdef['Type']
 			when /datetime/i
-				unless parsedate(val)
+				unless DateUtil.parsedate(val)
 					warn("#{cat}.#{fname} is invalid datetime", val)
 					subdic[fname] = nil
 					continue
 				end
 				subdic[fname] = val
 			when /int/i
-				subdic[fname] = trycast(val)
+				subdic[fname] = RegxUtil.trycast(val)
 			else
 				subdic[fname] = val
 			end
@@ -131,12 +131,13 @@ class InstinctBatch
 		@merges.each do |rec|
 			if rec['category'] == 'Application'
 				fields = rec['fields'].map { |fld| dic[fld] }
-				debug(fields)
+				LogUtil.debug('fields to be concatenated', fields)							
 				dic[rec['field_name']] = fields.join(rec['delimiter'])
 				next
 			end
 			dic[rec['category']].each do |cat|
 				fields = rec['fields'].map { |fld| cat[fld] }
+				LogUtil.debug('fields to be concatenated', fields)
 				cat[rec['field_name']] = fields.compact.join(rec['delimiter'])
 			end
 		end

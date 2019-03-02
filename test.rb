@@ -70,17 +70,17 @@ end
 def test_file()
 	fpath = 'E:/work/Ingenuous/OneDrive - ingenuous.com.au/Projects/EWB/Documents from EWB/INSTINCT_FLAT_FILES_FROM_CAS_ASCCEND/AUTO_LOAN_FILE/ADDRESS_12202018.txt'
 	files = Dir[File.dirname(fpath) + '/*.txt']
-	debug('files of the folder: (%d)' % files.length,  files)
-	debug('get key records of a file', getlinesofkey(fpath, '^2164003'))
-	debug('get jsons of a file', getrecordsofkey(fpath, '^2164003'))
-	debug('get file in the folder with pattern', getfileoffolder(File.dirname(fpath), '/CAS_APPLICATIONS*.txt'))
+	LogUtil.debug('files of the folder: (%d)' % files.length,  files)
+	LogUtil.debug('get key records of a file', getlinesofkey(fpath, '^2164003'))
+	LogUtil.debug('get jsons of a file', getrecordsofkey(fpath, '^2164003'))
+	LogUtil.debug('get file in the folder with pattern', getfileoffolder(File.dirname(fpath), '/CAS_APPLICATIONS*.txt'))
 end
 
 def test_parsebatch()
 	ib = InstinctBatch.new(jsonpath: "E:/work/Ingenuous/OneDrive - ingenuous.com.au/poc/TH-Summit/prep/logstash/subwork/mapInstinct.json",countrycode: 'TH', org:'SUT')
 	bline = ib.generatesample()
 	parsedrec = ib.parserecord(batchline: bline)
-	writejson(parsedrec, './sampleparsed.json')
+	FileUtil.writejson(parsedrec, './sampleparsed.json')
 end
 
 test_parsebatch()

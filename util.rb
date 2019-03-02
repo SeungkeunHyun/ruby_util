@@ -1,13 +1,14 @@
 require 'date'
 require 'json'
-require_relative './logutil.rb'
-require_relative './dateutil.rb'
-require_relative './fileutil.rb'
-require_relative './regxutil.rb'
-require_relative './parse_batch.rb'
+require 'logger'
+require_relative './logutil'
+require_relative './dateutil'
+require_relative './fileutil'
+require_relative './regxutil'
+require_relative './parse_batch'
 
 def initLogger()
-	config = loadjson(File.dirname(__FILE__) + '/utilcfg.json')
+	config = FileUtil.loadjson(File.dirname(__FILE__) + '/utilcfg.json')
 	if config.key?('log.path')
 		lpath = config['log.path']
 		unless File.file?(lpath)
@@ -20,8 +21,8 @@ def initLogger()
 			$logger = Logger.new(lpath)
 		end
 	end
-	setformatter
-	setloglevel(config['log.level'])	
+	LogUtil.setformatter
+	LogUtil.setloglevel(config['log.level'])	
 end
 
 initLogger()
