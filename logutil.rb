@@ -1,7 +1,10 @@
 module LogUtil
+	# sub utility for Logger
 	module_function
 	
+	# global variable to be used/configured (see #initLogger)
 	$logger = nil
+	# log levels to be used in a lookup of current log level using index of each level
 	$loglevels = ['debug', 'info', 'warn', 'error', 'fatal']
 	if defined?(logging)
 		$logger = logging
@@ -10,6 +13,7 @@ module LogUtil
 		$logger.level = Logger::DEBUG
 	end
 
+	# formats logger's printing
 	def setformatter()
 		$logger.formatter = proc do |severity, datetime, progname, msg|
 			date_format = datetime.strftime("%Y-%m-%d %H:%M:%S")
@@ -21,6 +25,8 @@ module LogUtil
 		end
 	end
 
+	# set logger's level to be printed 
+	# @note lower level would be ignored (see #loglevels)
 	def setloglevel(lvl)
 		prevlevel = $logger.level
 		if prevlevel == $loglevels.index(lvl)
@@ -57,7 +63,10 @@ module LogUtil
 		log(ref, Logger::FATAL, args)
 	end
 
-
+	# main log writer called by methods for each log level
+	# it gets loglevel (one of #loglevels) and object array to be written to file
+	# any hash object would be printed into STDOUT to be shown as pretty JSON
+	# @note shouldn't be called directly from outside (see #debug, #info, #warn, #error, #fatal)
 	def log(*args)
 		ref = args.shift()
 		level = args.shift()
@@ -93,11 +102,13 @@ module LogUtil
 		end
 	end
 
+	# handles error to be catched within begin rescure block
 	def error_handler(err)
 		(Thread.current[:errors] ||= []) << err
 		error("#{err.class}: #{err.message} " + err.backtrace.join(","))
 	end
 
+	# any exit with error would be printed as fatal as a exit hook
 	at_exit do
 		if $!
 			fatal("#{$!} at #{$@}")

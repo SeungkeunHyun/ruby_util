@@ -3,3 +3,5 @@ sample*.json
 /outputs
 /spec
 /mapped
+parse_batch.rb
+IntuitionMapper.rb
