@@ -64,9 +64,13 @@ module LogUtil
 	end
 
 	# main log writer called by methods for each log level
+	#
 	# it gets loglevel (one of #loglevels) and object array to be written to file
+	#
 	# any hash object would be printed into STDOUT to be shown as pretty JSON
+	#
 	# @note shouldn't be called directly from outside (see #debug, #info, #warn, #error, #fatal)
+	#
 	def log(*args)
 		ref = args.shift()
 		level = args.shift()

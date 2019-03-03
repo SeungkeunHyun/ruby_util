@@ -5,3 +5,5 @@ sample*.json
 /mapped
 parse_batch.rb
 IntuitionMapper.rb
+/docs
+*.zip

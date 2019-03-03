@@ -5,8 +5,10 @@
 # for other modules to be configured in future
 # All modules in this file needs to be placed under the same folder of this code
 # modules in this utils are like below
-# modules:: log, date, file, regx, csv
-# classes:: parse_batch, IntuitionMaper
+
+# @note there is a test codes of below utilities under development in test.rb
+# *modules:: log, date, file, regx, csv
+# *classes:: parse_batch, IntuitionMaper
 
 require 'date'
 require 'json'
