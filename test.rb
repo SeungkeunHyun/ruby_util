@@ -1,4 +1,5 @@
 require './util.rb'
+require './spec/robot'
 
 def test_parsedate() 
 	dt = parsedate('Feb/26/19')
@@ -81,10 +82,33 @@ def test_parsebatch()
 	bline = ib.generatesample()
 	parsedrec = ib.parserecord(batchline: bline)
 	FileUtil.writejson(parsedrec, './sampleparsed.json')
+	return parsedrec
 end
 
-test_parsebatch()
+def test_csv()
+	hashcsv = CSVUtil.csvtojson('E:\work\Ingenuous\OneDrive - ingenuous.com.au\poc\TH-Summit\prep\logstash\subwork\intuitionmap.csv', "\t")
+	LogUtil.debug(hashcsv)
+end
 
+def test_genmapper()
+	rnames = ['John', 'Paul', 'Andy', 'Bill', 'Jane', 'Jessie', 'Alita','Maria']
+	mapper = IntuitionMapper.new(csvpath: 'E:\work\Ingenuous\OneDrive - ingenuous.com.au\poc\TH-Summit\prep\logstash\subwork\intuitionmap.csv', delimiter: "\t")
+	srcrec = test_parsebatch()
+	robot = Robot.new
+	LogUtil.debug(robot)
+	srcrec['Applicant'].each do |rec|
+		rec['First Name'] = rnames.sample
+		rec['Surname'] = rnames.sample
+	end
+	srcrec['U2A'][0]['User Field 31'] = srcrec['Applicant'][0]['First Name']
+	srcrec['U2A'][0]['User Field 32'] = srcrec['Applicant'][0]['Surname']
+	LogUtil.debug('U2A', srcrec['U2A'][0]['User Field 31'],srcrec['Applicant'][0]['First Name'])	
+	mapper.mapsource(srcrec)
+end
+
+#test_parsebatch()
+test_csv()
+test_genmapper()
 #puts(JSON.pretty_generate(dic))
 #test_parsedate
 #test_loadjson

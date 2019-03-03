@@ -8,7 +8,13 @@ class InstinctBatch
 	end
 
 	def generatemerges()
-		@merges = [{'category' => 'Application', 'field_name' => 'AppKey', 'delimiter' => '', 'fields' => ['Organisation', 'Country Code', 'Application Number', 'Application Type']}, {'category' => 'Applicant', 'field_name' => 'Full_Name', 'delimiter' => ' ', 'fields' => ['First Name', 'Middle Name', 'Surname']}]
+		@merges = [{'category' => 'Application', 'field_name' => 'AppKey', 'delimiter' => '', 'fields' => ['Organisation', 'Country Code', 'Application Number', 'Application Type']}]
+		@merges << {'category' => 'Applicant', 'field_name' => 'Full_Name', 'delimiter' => ' ', 'fields' => ['First Name', 'Middle Name', 'Surname']}
+		@merges << {'category' => 'Applicant', 'field_name' => 'Full_Home_Address', 'delimiter' => ' ', 'fields' => ["Home Address 1","Home Address 2","Home Address 3","Home Address 4","Home Address 5","Home Address 6","Home Postcode"]}
+		@merges << {'category' => 'Applicant', 'field_name' => 'Full_Company_Address', 'delimiter' => ' ', 'fields' => ["Company Address 1","Company Address 2","Company Address 3","Company Address 4","Company Address 5","Company Address 6","Company Postcode"]}
+		@merges << {'category' => 'Accountant/Solicitor', 'field_name' => 'Full_Name', 'delimiter' => ' ', 'fields' => ['First Name', 'Middle Name', 'Surname']}
+		@merges << {'category' => 'Valuer', 'field_name' => 'Full_Address', 'delimiter' => ' ', 'fields' => ["Company Address 1","Company Address 2","Company Address 3","Company Address 4","Company Address 5","Company Address 6","Company Postcode"]}
+		@merges << {'category' => 'Security', 'field_name' => 'Full_Address', 'delimiter' => ' ', 'fields' => ["Home Address 1","Home Address 2","Home Address 3","Home Address 4","Home Address 5","Home Address 6","Home Postcode"]}		
 	end
 
 	def calculatefield(dic) 
@@ -36,7 +42,7 @@ class InstinctBatch
 		@jsondic.each do |c, fields|
 			LogUtil.debug('category: ', c)
 			unless fields[0].key?('category_identifier')
-				rec += fields.map { |fld| 
+				rec << fields.map { |fld| 
 					case fld['Field']
 					when /Organisation/i
 						@org
@@ -69,10 +75,10 @@ class InstinctBatch
 					end
 				end
 			}
-			rec += subcat
+			rec << subcat
 			if c == 'Applicant'
 				2.times do 
-					rec += subcat
+					rec << subcat
 				end
 			end
 		end
@@ -130,13 +136,13 @@ class InstinctBatch
 		fields = []
 		@merges.each do |rec|
 			if rec['category'] == 'Application'
-				fields = rec['fields'].map { |fld| dic[fld] }
+				fields = rec['fields'].map { |fld| dic[fld] }.compact
 				LogUtil.debug('fields to be concatenated', fields)							
 				dic[rec['field_name']] = fields.join(rec['delimiter'])
 				next
 			end
 			dic[rec['category']].each do |cat|
-				fields = rec['fields'].map { |fld| cat[fld] }
+				fields = rec['fields'].map { |fld| cat[fld] }.compact
 				LogUtil.debug('fields to be concatenated', fields)
 				cat[rec['field_name']] = fields.compact.join(rec['delimiter'])
 			end
