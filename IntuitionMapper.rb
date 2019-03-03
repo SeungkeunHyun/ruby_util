@@ -1,4 +1,6 @@
 class IntuitionMapper
+	attr_reader :mapperJSON
+	
 	def initialize(csvpath:, delimiter: "\t")
 		@csvpath = csvpath
 		@delimiter = delimiter

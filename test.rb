@@ -80,6 +80,7 @@ end
 def test_parsebatch()
 	ib = InstinctBatch.new(jsonpath: "E:/work/Ingenuous/OneDrive - ingenuous.com.au/poc/TH-Summit/prep/logstash/subwork/mapInstinct.json",countrycode: 'TH', org:'SUT')
 	bline = ib.generatesample()
+	FileUtil.writetofile(bline, './outputs/B_sample_summitth.txt')
 	parsedrec = ib.parserecord(batchline: bline)
 	FileUtil.writejson(parsedrec, './sampleparsed.json')
 	return parsedrec
@@ -91,8 +92,9 @@ def test_csv()
 end
 
 def test_genmapper()
-	rnames = ['John', 'Paul', 'Andy', 'Bill', 'Jane', 'Jessie', 'Alita','Maria']
+	rnames = ['John', 'Paul', 'Andy', 'Bill', 'Jane', 'Jessie', 'Alita','Maria','Tony','Juliet']
 	mapper = IntuitionMapper.new(csvpath: 'E:\work\Ingenuous\OneDrive - ingenuous.com.au\poc\TH-Summit\prep\logstash\subwork\intuitionmap.csv', delimiter: "\t")
+	FileUtil.writejson(mapper.mapperJSON, './outputs/mapIntuition.json')
 	srcrec = test_parsebatch()
 	robot = Robot.new
 	LogUtil.debug(robot)
@@ -102,6 +104,7 @@ def test_genmapper()
 	end
 	srcrec['U2A'][0]['User Field 31'] = srcrec['Applicant'][0]['First Name']
 	srcrec['U2A'][0]['User Field 32'] = srcrec['Applicant'][0]['Surname']
+
 	LogUtil.debug('U2A', srcrec['U2A'][0]['User Field 31'],srcrec['Applicant'][0]['First Name'])	
 	mapper.mapsource(srcrec)
 end

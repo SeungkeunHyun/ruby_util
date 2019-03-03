@@ -3,6 +3,7 @@ class InstinctBatch
 		@jsondic = FileUtil.loadjson(jsonpath)
 		@countrycode = countrycode
 		@org = org
+		@randomnames = ['John', 'Paul', 'Andy', 'Bill', 'Jane', 'Jessie', 'Alita','Maria','Tony','Juliet']
 		generatemerges()
 		#debug(@jsondic)
 	end
@@ -42,7 +43,7 @@ class InstinctBatch
 		@jsondic.each do |c, fields|
 			LogUtil.debug('category: ', c)
 			unless fields[0].key?('category_identifier')
-				rec << fields.map { |fld| 
+				rec += fields.map { |fld| 
 					case fld['Field']
 					when /Organisation/i
 						@org
@@ -50,6 +51,8 @@ class InstinctBatch
 						DateUtil.generatetimeinms()
 					when /Application Type/i
 						['AUTO', 'LOAN', 'CARD'].sample
+					when /Application Date/i
+						DateUtil.generatedatelately().strftime('%d/%m/%Y')
 					when /Country Code/i
 						@countrycode
 					else
@@ -70,15 +73,17 @@ class InstinctBatch
 						DateUtil.generatedatelately().strftime('%d/%m/%Y')
 					elsif fld['Type'] =~ /int/i
 						DateUtil.generatetimeinms()
+					elsif fld['Field'] =~ /Name$/i
+						@randomnames.sample
 					else
 						fld['Field'] 
 					end
 				end
 			}
-			rec << subcat
+			rec += subcat
 			if c == 'Applicant'
 				2.times do 
-					rec << subcat
+					rec += subcat
 				end
 			end
 		end

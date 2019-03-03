@@ -1,2 +1,5 @@
 /logs
 sample*.json
+/outputs
+/spec
+/mapped

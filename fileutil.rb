@@ -24,6 +24,10 @@ module FileUtil
 		return opened
 	end
 
+	def writetofile(line, path)
+		File.open(path, "a") { |file| file.puts line}
+	end
+
 	def getlinesofkey(path, keypat)
 		lines = []
 		File.readlines(path).each do |line|
