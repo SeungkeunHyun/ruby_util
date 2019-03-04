@@ -91,13 +91,13 @@ module TestUtils
 	end
 
 	def test_csv()
-		hashcsv = CSVUtil.csvtojson('E:\work\Ingenuous\OneDrive - ingenuous.com.au\poc\TH-Summit\prep\logstash\subwork\intuitionmap.csv', "\t")
+		hashcsv = CSVUtil.csvtojson('E:/work/Ingenuous/OneDrive - ingenuous.com.au/poc/TH-Summit/prep/logstash/subwork/intuitionmap.csv', "\t")
 		LogUtil.debug(hashcsv)
 	end
 
 	def test_genmapper()
 		rnames = ['John', 'Paul', 'Andy', 'Bill', 'Jane', 'Jessie', 'Alita','Maria','Tony','Juliet']
-		mapper = IntuitionMapper.new(csvpath: 'E:\work\Ingenuous\OneDrive - ingenuous.com.au\poc\TH-Summit\prep\logstash\subwork\intuitionmap.csv', delimiter: "\t")
+		mapper = IntuitionMapper.new(csvpath: 'E:/work/Ingenuous/OneDrive - ingenuous.com.au/poc/TH-Summit/prep/logstash/subwork/intuitionmap.csv', delimiter: "\t")
 		FileUtil.writejson(mapper.mapperJSON, './outputs/mapIntuition.json')
 		srcrec = test_parsebatch()
 		robot = Robot.new

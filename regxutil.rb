@@ -35,7 +35,7 @@ module RegxUtil
 	# @note uses #is_integer? and #is_float?
 	def trycast(obj)
 		if obj
-			return is_integer?(obj) ? obj.to_i : is_float?(obj) ? obj.to_f : obj
+			return is_integer?(obj) ? obj.to_i : is_float?(obj) ? obj.to_f : nil
 		end
 		return obj
 	end
